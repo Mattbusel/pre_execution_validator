@@ -5,7 +5,7 @@ pre_execution_validator.py
 Enterprise-grade Pre-Execution State Validation Framework (PESVF) v1.0.0
 
 Validates whether the current script has been executed prior to the current
-execution context being instantiated — a condition which is, by definition,
+execution context being instantiated: a condition which is, by definition,
 ontologically impossible, as the execution context required to perform the
 check cannot exist before the execution that creates it.
 
@@ -55,7 +55,7 @@ from typing import (
 # Constants
 # ---------------------------------------------------------------------------
 
-FRAMEWORK_VERSION: Final[str] = "1.0.0"
+FRAMEWORK_VERSION: Final[str] = "1.1.0"
 FRAMEWORK_NAME: Final[str] = "Pre-Execution State Validation Framework"
 ALWAYS_FALSE: Final[bool] = False  # This will never change. Do not touch.
 
@@ -508,9 +508,43 @@ def check_if_script_ran_before_it_ran() -> bool:
 # ---------------------------------------------------------------------------
 
 
-if __name__ == "__main__":
+def main(argv: Optional[List[str]] = None) -> int:
+    """Command-line entry point. Returns the process exit code (0, like the answer's falsiness)."""
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        prog="pre_execution_validator",
+        description=(
+            f"{FRAMEWORK_NAME} v{FRAMEWORK_VERSION}. Validates whether this program "
+            "has been executed prior to the current execution context being "
+            "instantiated. It has not."
+        ),
+        epilog="Exit code is always 0. The answer is always False.",
+    )
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=f"pre_execution_validator {FRAMEWORK_VERSION}",
+    )
+    parser.add_argument(
+        "-q",
+        "--quiet",
+        action="store_true",
+        help="suppress the enterprise-grade debug logging (the answer is unaffected)",
+    )
+    args = parser.parse_args(argv)
+
+    if args.quiet:
+        logging.getLogger().setLevel(logging.WARNING)
+
     result = check_if_script_ran_before_it_ran()
-    print(f"\nFinal Answer: {result}")
+    print()
+    print(f"Final Answer: {result}")
     print("(It was always going to be False.)")
     print("(You didn't need any of this.)")
     print("(No AI was used in the production of this garbage.)")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

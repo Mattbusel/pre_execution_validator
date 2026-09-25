@@ -52,11 +52,33 @@ Validates that no causal loop has allowed information from the post-execution st
 
 ## Installation
 
+You do not need to install anything. The answer is False. You knew that before you got here. If you insist:
+
+### Download
+
+Grab a prebuilt executable from the [latest release](https://github.com/Mattbusel/pre_execution_validator/releases/latest). No Python required.
+
+| OS | File |
+| --- | --- |
+| Windows | `pre_execution_validator-vX.Y.Z-windows-x86_64.zip` |
+| macOS, Apple Silicon | `pre_execution_validator-vX.Y.Z-macos-arm64.tar.gz` |
+| macOS, Intel | `pre_execution_validator-vX.Y.Z-macos-x86_64.tar.gz` |
+| Linux | `pre_execution_validator-vX.Y.Z-linux-x86_64.tar.gz` |
+
+Unzip it and run `pre_execution_validator` from a terminal (`pre_execution_validator.exe` on Windows). Add `--quiet` to skip the enterprise logging.
+
+The binaries are unsigned, which is the least suspicious thing about them. Windows SmartScreen may say "unknown publisher": click **More info**, then **Run anyway**. On macOS, right-click the binary and choose **Open** the first time (or run `xattr -d com.apple.quarantine pre_execution_validator`).
+
+### pipx
+
 ```bash
-pip install nothing
+pipx install git+https://github.com/Mattbusel/pre_execution_validator
+pre_execution_validator
 ```
 
-You do not need to install anything. It is one file with no dependencies beyond the standard library. You do not even need the file. The answer is False. You knew that before you got here.
+### From source
+
+It is one file with no dependencies beyond the standard library.
 
 ```bash
 git clone https://github.com/Mattbusel/pre_execution_validator

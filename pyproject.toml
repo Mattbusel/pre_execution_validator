@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pre_execution_validator"
+version = "1.1.0"
+description = "Enterprise-grade validation of whether this script ran before it ran. It did not."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [{ name = "Matthew Busel" }]
+dependencies = []
+
+[project.scripts]
+pre_execution_validator = "pre_execution_validator:main"
+
+[project.urls]
+Homepage = "https://github.com/Mattbusel/pre_execution_validator"
+
+[tool.setuptools]
+py-modules = ["pre_execution_validator"]
