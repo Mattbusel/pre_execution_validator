@@ -14,11 +14,16 @@ It is a deliberately over-engineered, single-file Python parody of enterprise so
 
 ## Install
 
-| How | Command |
+| Platform | Command |
 | --- | --- |
-| pipx (any OS with Python 3.8+) | `pipx install git+https://github.com/Mattbusel/pre_execution_validator` |
-| Download, no Python needed | [Latest release](https://github.com/Mattbusel/pre_execution_validator/releases/latest): unzip and run `pre_execution_validator` |
-| From source | `git clone https://github.com/Mattbusel/pre_execution_validator && python pre_execution_validator/pre_execution_validator.py` |
+| macOS, Linux | `brew install mattbusel/tap/pre-execution-validator` |
+| Windows (Scoop) | `scoop bucket add mattbusel https://github.com/Mattbusel/scoop-bucket; scoop install pre-execution-validator` |
+| Windows (PowerShell, no Scoop) | `irm https://raw.githubusercontent.com/Mattbusel/pre_execution_validator/main/install.ps1 \| iex` |
+| macOS, Linux (no Homebrew) | `curl -fsSL https://raw.githubusercontent.com/Mattbusel/pre_execution_validator/main/install.sh \| sh` |
+| Any OS with Python 3.8+ | `pipx install git+https://github.com/Mattbusel/pre_execution_validator` |
+| Manual download | [Latest release](https://github.com/Mattbusel/pre_execution_validator/releases/latest): unzip and run `pre_execution_validator` |
+
+The install scripts download the release for your OS, check it against the release's `SHA256SUMS.txt`, and put one file named `pesvf` in `~/.local/bin` (macOS, Linux) or `%LOCALAPPDATA%\Programs\pesvf` (Windows, added to your user PATH). It is not on PyPI.
 
 You do not need to install anything. The answer is False. You knew that before you got here.
 
@@ -30,7 +35,7 @@ pesvf --quiet      # 2. just the report and the verdict
 pesvf --json       # 3. a machine-readable report for your compliance dashboard
 ```
 
-The pipx install also gives you `pre_execution_validator` as a longer name for the same command. The release download ships as `pre_execution_validator` (`.exe` on Windows).
+Homebrew, Scoop and pipx also give you `pre_execution_validator` as a longer name for the same command. The manual download ships as `pre_execution_validator` (`.exe` on Windows).
 
 ## Results
 
