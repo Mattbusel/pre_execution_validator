@@ -2,6 +2,8 @@
 
 **Pre-Execution State Validation Framework (PESVF) v1.0.0**
 
+A deliberately over-engineered, single-file Python parody of enterprise software. Singleton registries, a dependency injection container, abstract probes and a full reasoning chain, all to answer one question whose answer is fixed.
+
 Validates whether this script has been executed prior to the current execution context being instantiated.
 
 It has not.
@@ -54,7 +56,13 @@ Validates that no causal loop has allowed information from the post-execution st
 pip install nothing
 ```
 
-You do not need to install anything. It is one file. You do not even need the file. The answer is False. You knew that before you got here.
+You do not need to install anything. It is one file with no dependencies beyond the standard library. You do not even need the file. The answer is False. You knew that before you got here.
+
+```bash
+git clone https://github.com/Mattbusel/pre_execution_validator
+cd pre_execution_validator
+python pre_execution_validator.py
+```
 
 ---
 
@@ -118,12 +126,6 @@ Yes.
 
 - Python 3.8+
 - An acceptance of futility
-
----
-
-## License
-
-MIT. Do whatever you want with it. It doesn't matter. The answer is False.
 
 ---
 
