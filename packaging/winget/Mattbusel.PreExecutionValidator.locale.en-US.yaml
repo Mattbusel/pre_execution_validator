@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.defaultLocale.1.6.0.schema.json
+
+PackageIdentifier: Mattbusel.PreExecutionValidator
+PackageVersion: 1.1.1
+PackageLocale: en-US
+Publisher: Mattbusel
+PublisherUrl: https://github.com/Mattbusel
+PublisherSupportUrl: https://github.com/Mattbusel/pre_execution_validator/issues
+PackageName: pre_execution_validator
+PackageUrl: https://github.com/Mattbusel/pre_execution_validator
+License: MIT
+LicenseUrl: https://github.com/Mattbusel/pre_execution_validator/blob/main/LICENSE
+ShortDescription: "Parody enterprise tool that checks if a script ran before it ran (it did not)"
+Description: "A deliberately over-engineered parody of enterprise software: a singleton probe registry, a dependency injection container and four probes that check whether this program ran before it ran. The answer is always False."
+Tags:
+- parody
+- joke
+- cli
+- python
+ReleaseNotesUrl: https://github.com/Mattbusel/pre_execution_validator/releases/tag/v1.1.1
+ManifestType: defaultLocale
+ManifestVersion: 1.6.0

@@ -1,0 +1,15 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.installer.1.6.0.schema.json
+
+PackageIdentifier: Mattbusel.PreExecutionValidator
+PackageVersion: 1.1.1
+InstallerType: zip
+NestedInstallerType: portable
+NestedInstallerFiles:
+- RelativeFilePath: pre_execution_validator-v1.1.1-windows-x86_64\pre_execution_validator.exe
+  PortableCommandAlias: pesvf
+Installers:
+- Architecture: x64
+  InstallerUrl: https://github.com/Mattbusel/pre_execution_validator/releases/download/v1.1.1/pre_execution_validator-v1.1.1-windows-x86_64.zip
+  InstallerSha256: 6379FA6E351C40A83060D4D18A3E1D7A3E999E9401BB45B76C9802633ED85D86
+ManifestType: installer
+ManifestVersion: 1.6.0
