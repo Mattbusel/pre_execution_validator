@@ -1,0 +1,84 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>
+:root{--navy:#13294b;--navy2:#0b1a30;--gold:#c9a227;--paper:#f8f6f0;--ink:#1d2433;--muted:#5b6678;--red:#b3261e;--line:#d9d4c7}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:transparent;font-family:'Segoe UI',Arial,sans-serif}
+.card{position:relative;overflow:hidden;background:var(--navy);color:#e7ecf4;display:flex;align-items:center;gap:44px}
+.banner{width:1280px;height:440px;padding:0 64px}
+.social{width:1280px;height:640px;padding:0 72px}
+.card:before{content:"";position:absolute;inset:0;background:
+  repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 28px),
+  repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 1px,transparent 1px 28px)}
+.stripe{position:absolute;left:0;right:0;top:0;height:8px;background:linear-gradient(90deg,var(--gold) 0 34%,#1f3c69 34% 100%)}
+.left{position:relative;flex:1.05}
+.kicker{font:600 13px 'Segoe UI';letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+h1{font:700 44px 'Cascadia Mono',Consolas,monospace;letter-spacing:-.01em;color:#fff}
+.social h1{font-size:50px}
+.sub{font:400 19px Georgia,'Times New Roman',serif;font-style:italic;color:#b9c6d8;margin-top:8px}
+.pitch{font:500 21px 'Segoe UI';color:#eef2f8;margin-top:22px;line-height:1.4;max-width:560px}
+.probes{margin-top:22px;display:grid;grid-template-columns:1fr 1fr;gap:7px 18px;font:12.5px 'Cascadia Mono',Consolas,monospace;color:#9fb0c7;max-width:600px}
+.probes span b{color:#6fd08c;font-weight:700;margin-right:6px}
+.cert{position:relative;flex:.95;background:var(--paper);color:var(--ink);border-radius:4px;padding:26px 30px 24px;box-shadow:0 24px 60px rgba(0,0,0,.45);border-top:6px solid var(--gold);transform:rotate(-1.2deg)}
+.cert h2{font:700 12px 'Segoe UI';letter-spacing:.24em;text-transform:uppercase;color:var(--navy)}
+.cert h3{font:400 23px Georgia,serif;margin:6px 0 14px;color:var(--ink)}
+.row{display:flex;justify-content:space-between;gap:18px;border-bottom:1px dashed var(--line);padding:6px 0;font:13px 'Cascadia Mono',Consolas,monospace}
+.row span:first-child{color:var(--muted)}
+.row .f{color:var(--red);font-weight:700}
+.sig{position:absolute;left:30px;bottom:22px;max-width:44%;line-height:1.35;font:italic 13px Georgia,serif;color:var(--muted)}
+.stamp{position:absolute;right:30px;bottom:12px;transform:rotate(-6deg);border:4px solid var(--red);color:var(--red);font:800 38px 'Segoe UI',Arial;letter-spacing:.12em;padding:0 14px;border-radius:8px;opacity:.86;
+  -webkit-mask-image:radial-gradient(circle at 30% 40%,#000 60%,rgba(0,0,0,.72) 61%,#000 75%)}
+.stamp small{display:block;font:700 10px 'Segoe UI';letter-spacing:.3em;text-align:center;margin-top:-4px}
+.cert{padding-bottom:92px}.social .cert{zoom:1.1;flex:0 0 440px}
+.foot{position:absolute;left:72px;bottom:26px;font:12px 'Segoe UI';color:#8193ad;letter-spacing:.06em}
+</style></head><body>
+<div id="banner" class="card banner">
+  <div class="stripe"></div>
+  <div class="left">
+    <div class="kicker">Pre-Execution State Validation Framework</div>
+    <h1>pre_execution_validator</h1>
+    <div class="sub">A deliberately over-engineered answer to a question nobody asked.</div>
+    <div class="pitch">Checks, with four probes and a dependency injection container, whether this script ran before it ran.</div>
+    <div class="probes">
+      <span><b>&#10003;</b>FilesystemResidueProbe</span><span><b>&#10003;</b>ProcessTableProbe</span>
+      <span><b>&#10003;</b>QuantumStateProbe</span><span><b>&#10003;</b>CausalLoopIntegrityProbe</span>
+    </div>
+  </div>
+  <div class="cert">
+    <h2>Certificate of Validation</h2>
+    <h3>Prior execution was not detected.</h3>
+    <div class="row"><span>Run ID</span><span>9207a213-c1cc-449f</span></div>
+    <div class="row"><span>Result</span><span>NO_PRIOR_EXECUTION_DETECTED</span></div>
+    <div class="row"><span>Prior Execution</span><span class="f">False</span></div>
+    <div class="row"><span>Confidence</span><span>100.00%</span></div>
+    <div class="row"><span>Duration</span><span>8,700 ns</span></div>
+    <div class="sig">Issued by pesvf 1.1.1. The answer was never in doubt.</div>
+    <div class="stamp">FALSE<small>VERIFIED</small></div>
+  </div>
+</div>
+<div style="height:30px"></div>
+<div id="social" class="card social">
+  <div class="stripe"></div>
+  <div class="left">
+    <div class="kicker">Pre-Execution State Validation Framework</div>
+    <h1>pre_execution_validator</h1>
+    <div class="sub">A deliberately over-engineered answer to a question nobody asked.</div>
+    <div class="pitch">Checks, with four probes and a dependency injection container, whether this script ran before it ran.</div>
+    <div class="probes">
+      <span><b>&#10003;</b>FilesystemResidueProbe</span><span><b>&#10003;</b>ProcessTableProbe</span>
+      <span><b>&#10003;</b>QuantumStateProbe</span><span><b>&#10003;</b>CausalLoopIntegrityProbe</span>
+    </div>
+  </div>
+  <div class="cert">
+    <h2>Certificate of Validation</h2>
+    <h3>Prior execution was not detected.</h3>
+    <div class="row"><span>Run ID</span><span>9207a213-c1cc-449f</span></div>
+    <div class="row"><span>Result</span><span>NO_PRIOR_EXECUTION_DETECTED</span></div>
+    <div class="row"><span>Prior Execution</span><span class="f">False</span></div>
+    <div class="row"><span>Confidence</span><span>100.00%</span></div>
+    <div class="row"><span>Duration</span><span>8,700 ns</span></div>
+    <div class="sig">Issued by pesvf 1.1.1. The answer was never in doubt.</div>
+    <div class="stamp">FALSE<small>VERIFIED</small></div>
+  </div>
+  <div class="foot">github.com/Mattbusel/pre_execution_validator</div>
+</div>
+</body></html>

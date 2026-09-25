@@ -55,7 +55,7 @@ from typing import (
 # Constants
 # ---------------------------------------------------------------------------
 
-FRAMEWORK_VERSION: Final[str] = "1.1.0"
+FRAMEWORK_VERSION: Final[str] = "1.1.1"
 FRAMEWORK_NAME: Final[str] = "Pre-Execution State Validation Framework"
 ALWAYS_FALSE: Final[bool] = False  # This will never change. Do not touch.
 
@@ -178,29 +178,62 @@ class ValidationReport:
     duration_ns: int
     framework_version: str = FRAMEWORK_VERSION
 
-    def summary(self) -> str:
+    def summary(self, color: bool = False) -> str:
+        """The boxed report. ``color=True`` adds ANSI colors (the CLI decides; NO_COLOR is honored there)."""
+        c = _Palette(color)
+        rule = c.rule("=" * 64)
         lines = [
-            f"{'=' * 64}",
-            f"  {FRAMEWORK_NAME} v{self.framework_version}",
-            f"{'=' * 64}",
-            f"  Run ID              : {self.fingerprint.run_id}",
-            f"  PID                 : {self.fingerprint.pid}",
-            f"  Script              : {self.fingerprint.script_path}",
-            f"  Prior Execution     : {self.prior_execution_detected}",
-            f"  Result              : {self.result.value}",
-            f"  Confidence          : {self.confidence * 100:.2f}%",
-            f"  Duration            : {self.duration_ns:,} ns",
-            f"{'=' * 64}",
-            "  Reasoning Chain:",
+            rule,
+            f"  {c.title(FRAMEWORK_NAME)} {c.dim('v' + self.framework_version)}",
+            rule,
+            f"  {c.label('Run ID              :')} {self.fingerprint.run_id}",
+            f"  {c.label('PID                 :')} {self.fingerprint.pid}",
+            f"  {c.label('Script              :')} {self.fingerprint.script_path}",
+            f"  {c.label('Prior Execution     :')} {c.false(str(self.prior_execution_detected))}",
+            f"  {c.label('Result              :')} {c.warn(self.result.value)}",
+            f"  {c.label('Confidence          :')} {c.ok(f'{self.confidence * 100:.2f}%')}",
+            f"  {c.label('Duration            :')} {self.duration_ns:,} ns",
+            rule,
+            f"  {c.title('Reasoning Chain:')}",
         ]
         for i, step in enumerate(self.reasoning_chain, 1):
-            lines.append(f"    {i}. {step}")
+            if step.startswith("[") and "] " in step:
+                probe, rest = step[1:].split("] ", 1)
+                step = f"{c.probe('[' + probe + ']')} {rest}"
+            lines.append(f"    {c.dim(str(i) + '.')} {step}")
         if self.anomalies:
-            lines.append("  Anomalies Detected:")
+            lines.append(f"  {c.false('Anomalies Detected:')}")
             for a in self.anomalies:
                 lines.append(f"    ⚠ {a}")
-        lines.append(f"{'=' * 64}")
+        lines.append(rule)
         return "\n".join(lines)
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Everything in the report as plain JSON-ready data."""
+        data = dataclasses.asdict(self)
+        data["result"] = self.result.value
+        data["fingerprint"]["argv"] = list(self.fingerprint.argv)
+        return data
+
+
+class _Palette:
+    """ANSI styling for the CLI. With color off every method returns the text unchanged."""
+
+    def __init__(self, on: bool) -> None:
+        self.on = on
+
+    def _w(self, code: str, text: str) -> str:
+        return f"\033[{code}m{text}\033[0m" if self.on else text
+
+    def rule(self, t: str) -> str: return self._w("38;5;25", t)
+    def title(self, t: str) -> str: return self._w("1;38;5;153", t)
+    def label(self, t: str) -> str: return self._w("38;5;109", t)
+    def dim(self, t: str) -> str: return self._w("2", t)
+    def ok(self, t: str) -> str: return self._w("1;32", t)
+    def warn(self, t: str) -> str: return self._w("1;33", t)
+    def false(self, t: str) -> str: return self._w("1;31", t)
+    def probe(self, t: str) -> str: return self._w("36", t)
+    def stamp(self, t: str) -> str: return self._w("1;97;41", t)
 
 
 # ---------------------------------------------------------------------------
@@ -508,18 +541,74 @@ def check_if_script_ran_before_it_ran() -> bool:
 # ---------------------------------------------------------------------------
 
 
+def _color_wanted(stream: Any) -> bool:
+    """Color only for a real terminal, unless NO_COLOR or FORCE_COLOR says otherwise."""
+    if os.environ.get("NO_COLOR"):
+        return False
+    if os.environ.get("FORCE_COLOR"):
+        return True
+    try:
+        return bool(stream.isatty())
+    except Exception:
+        return False
+
+
+def _enable_windows_ansi() -> None:
+    """Turn on ANSI escape handling in older Windows consoles. Harmless elsewhere."""
+    if os.name != "nt":
+        return
+    try:
+        import ctypes
+
+        kernel32 = ctypes.windll.kernel32  # type: ignore[attr-defined]
+        for handle_id in (-11, -12):  # stdout, stderr
+            handle = kernel32.GetStdHandle(handle_id)
+            mode = ctypes.c_uint32()
+            if kernel32.GetConsoleMode(handle, ctypes.byref(mode)):
+                kernel32.SetConsoleMode(handle, mode.value | 0x0004)
+    except Exception:
+        pass
+
+
+class _ColorLogFormatter(logging.Formatter):
+    """The same enterprise log line, with the level colored like a real SIEM would."""
+
+    LEVELS = {"DEBUG": "2", "INFO": "36", "WARNING": "33", "ERROR": "31", "CRITICAL": "1;31"}
+
+    def format(self, record: logging.LogRecord) -> str:
+        line = super().format(record)
+        code = self.LEVELS.get(record.levelname)
+        if not code:
+            return line
+        return line.replace(record.levelname, f"[{code}m{record.levelname}[0m", 1)
+
+
+EXAMPLES = """examples:
+  %(prog)s              full enterprise run: logs, report, final answer
+  %(prog)s --quiet      just the report and the answer
+  %(prog)s --json       machine-readable report for your compliance dashboard
+  NO_COLOR=1 %(prog)s   plain text, for auditors who fear color
+
+Exit code is always 0. The answer is always False."""
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     """Command-line entry point. Returns the process exit code (0, like the answer's falsiness)."""
     import argparse
+    import json
+    import textwrap
 
+    invoked = Path(sys.argv[0]).stem if sys.argv and sys.argv[0] else ""
+    prog = invoked if invoked in ("pesvf", "pre_execution_validator", "pre-execution-validator") else "pesvf"
     parser = argparse.ArgumentParser(
-        prog="pre_execution_validator",
-        description=(
-            f"{FRAMEWORK_NAME} v{FRAMEWORK_VERSION}. Validates whether this program "
-            "has been executed prior to the current execution context being "
-            "instantiated. It has not."
+        prog=prog,
+        description=textwrap.fill(
+            f"{FRAMEWORK_NAME} v{FRAMEWORK_VERSION}. Checks whether this program "
+            "ran before it ran. It did not.",
+            width=78,
         ),
-        epilog="Exit code is always 0. The answer is always False.",
+        epilog=EXAMPLES,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument(
         "--version",
@@ -530,19 +619,43 @@ def main(argv: Optional[List[str]] = None) -> int:
         "-q",
         "--quiet",
         action="store_true",
-        help="suppress the enterprise-grade debug logging (the answer is unaffected)",
+        help="hide the enterprise-grade debug logging (the answer is unaffected)",
+    )
+    parser.add_argument(
+        "--json",
+        action="store_true",
+        help="print the full validation report as JSON on stdout (logs stay on stderr)",
     )
     args = parser.parse_args(argv)
 
-    if args.quiet:
+    _enable_windows_ansi()
+    out_color = _color_wanted(sys.stdout)
+    if _color_wanted(sys.stderr):
+        for handler in logging.getLogger().handlers:
+            handler.setFormatter(_ColorLogFormatter(handler.formatter._fmt if handler.formatter else None))  # type: ignore[union-attr]
+    if args.quiet or args.json:
         logging.getLogger().setLevel(logging.WARNING)
 
-    result = check_if_script_ran_before_it_ran()
+    report = PESVFContainer().build().run()
+    if report.prior_execution_detected:
+        raise TemporalParadoxError(
+            TemporalAnomalyCode.T001,
+            "Prior execution confirmed. This violates causality. "
+            "Please contact your nearest physics department.",
+        )
+
+    if args.json:
+        print(json.dumps(report.to_dict(), indent=2))
+        return 0
+
+    c = _Palette(out_color)
+    print(report.summary(color=out_color))
     print()
-    print(f"Final Answer: {result}")
-    print("(It was always going to be False.)")
-    print("(You didn't need any of this.)")
-    print("(No AI was used in the production of this garbage.)")
+    stamp = c.stamp(" VERIFIED FALSE ") if out_color else "[VERIFIED FALSE]"
+    print(f"Final Answer: {c.false(str(ALWAYS_FALSE))}  {stamp}")
+    print(c.dim("(It was always going to be False.)"))
+    print(c.dim("(You didn't need any of this.)"))
+    print(c.dim("(No AI was used in the production of this garbage.)"))
     return 0
 
 
