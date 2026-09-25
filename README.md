@@ -1,94 +1,70 @@
-# pre_execution_validator.py
+<p align="center">
+  <img src="assets/banner.png" alt="pre_execution_validator: a certificate stamped FALSE, issued by pesvf 1.1.1" width="100%">
+</p>
 
-**Pre-Execution State Validation Framework (PESVF) v1.0.0**
+# pre_execution_validator
 
-A deliberately over-engineered, single-file Python parody of enterprise software. Singleton registries, a dependency injection container, abstract probes and a full reasoning chain, all to answer one question whose answer is fixed.
+**A joke program that very seriously checks whether it ran before it ran. The answer is always False.**
 
-Validates whether this script has been executed prior to the current execution context being instantiated.
+It is a deliberately over-engineered, single-file Python parody of enterprise software: a singleton probe registry, a dependency injection container, abstract base classes, four probes and a full reasoning chain, all to answer one question whose answer is fixed. The command is `pesvf` (short for Pre-Execution State Validation Framework).
 
-It has not.
+<p align="center">
+  <img src="assets/demo.gif" alt="Terminal recording: pesvf --version, then a full pesvf run printing logs, the validation report and Final Answer: False" width="100%">
+</p>
 
-It never has.
+## Install
 
-It never will.
-
----
-
-## The Problem
-
-Nobody asked: has this script run before it runs?
-
-This library answers that question with the full rigor it deserves.
-
----
-
-## How It Works
-
-1. Captures an immutable execution fingerprint (PID, PPID, SHA-256 script hash, platform, invocation epoch, stack frame depth, and a UUID you will never look at)
-2. Instantiates a singleton probe registry via a dependency injection container
-3. Runs four enterprise-grade probes across the execution context
-4. Aggregates evidence
-5. Returns False
-6. Has always returned False
-7. Will always return False
-
----
-
-## Probes
-
-**FilesystemResidueProbe**
-Scans the filesystem for artifacts left by a previous run. Finds nothing. The universe appears fresh.
-
-**ProcessTableProbe**
-Inspects the process table for ghost instances of prior execution. Finds nothing. The process did not exist before it was started. This is not a bug. This is physics.
-
-**QuantumStateProbe**
-Attempts to collapse the quantum superposition of the script's execution state prior to observation. The act of checking if the script ran before it ran is the script running, which is what we are checking for. Observation confirms execution. Execution invalidates check. We are inside the paradox now. Returns False anyway.
-
-**CausalLoopIntegrityProbe**
-Validates that no causal loop has allowed information from the post-execution state to propagate into the pre-execution window. If there were a causal loop, we would already know the result. We do. It's False.
-
----
-
-## Installation
-
-You do not need to install anything. The answer is False. You knew that before you got here. If you insist:
-
-### Download
-
-Grab a prebuilt executable from the [latest release](https://github.com/Mattbusel/pre_execution_validator/releases/latest). No Python required.
-
-| OS | File |
+| How | Command |
 | --- | --- |
-| Windows | `pre_execution_validator-vX.Y.Z-windows-x86_64.zip` |
-| macOS, Apple Silicon | `pre_execution_validator-vX.Y.Z-macos-arm64.tar.gz` |
-| macOS, Intel | `pre_execution_validator-vX.Y.Z-macos-x86_64.tar.gz` |
-| Linux | `pre_execution_validator-vX.Y.Z-linux-x86_64.tar.gz` |
+| pipx (any OS with Python 3.8+) | `pipx install git+https://github.com/Mattbusel/pre_execution_validator` |
+| Download, no Python needed | [Latest release](https://github.com/Mattbusel/pre_execution_validator/releases/latest): unzip and run `pre_execution_validator` |
+| From source | `git clone https://github.com/Mattbusel/pre_execution_validator && python pre_execution_validator/pre_execution_validator.py` |
 
-Unzip it and run `pre_execution_validator` from a terminal (`pre_execution_validator.exe` on Windows). Add `--quiet` to skip the enterprise logging.
+You do not need to install anything. The answer is False. You knew that before you got here.
 
-The binaries are unsigned, which is the least suspicious thing about them. Windows SmartScreen may say "unknown publisher": click **More info**, then **Run anyway**. On macOS, right-click the binary and choose **Open** the first time (or run `xattr -d com.apple.quarantine pre_execution_validator`).
-
-### pipx
+## Use it in 3 steps
 
 ```bash
-pipx install git+https://github.com/Mattbusel/pre_execution_validator
-pre_execution_validator
+pesvf              # 1. the full enterprise experience: logs, report, verdict
+pesvf --quiet      # 2. just the report and the verdict
+pesvf --json       # 3. a machine-readable report for your compliance dashboard
 ```
 
-### From source
+The pipx install also gives you `pre_execution_validator` as a longer name for the same command. The release download ships as `pre_execution_validator` (`.exe` on Windows).
 
-It is one file with no dependencies beyond the standard library.
+## Results
 
-```bash
-git clone https://github.com/Mattbusel/pre_execution_validator
-cd pre_execution_validator
-python pre_execution_validator.py
+Real output of `pesvf --quiet`, recorded today:
+
+```
+================================================================
+  Pre-Execution State Validation Framework v1.1.1
+================================================================
+  Run ID              : 7217493c-1020-4410-9f38-7dd82a72f382
+  PID                 : 29448
+  Script              : C:\Users\Matthew\AppData\Local\Temp\pv\Scripts\pesvf
+  Prior Execution     : False
+  Result              : NO_PRIOR_EXECUTION_DETECTED
+  Confidence          : 100.00%
+  Duration            : 7,200 ns
+================================================================
+  Reasoning Chain:
+    1. [FilesystemResidueProbe] No filesystem residue detected. Universe appears fresh.
+    2. [ProcessTableProbe] No prior process ghost detected. Thermodynamics intact.
+    3. [QuantumStateProbe] Wave function collapsed. Paradox acknowledged. Moving on.
+    4. [CausalLoopIntegrityProbe] Causal loop integrity confirmed. Timeline is linear. Probably.
+    5. Aggregated evidence across all probes. Prior execution detected: False. This was obvious before we started.
+================================================================
+
+Final Answer: False  [VERIFIED FALSE]
+(It was always going to be False.)
+(You didn't need any of this.)
+(No AI was used in the production of this garbage.)
 ```
 
----
+In a terminal the verdict is red, the probes are cyan and the logs are color-coded by level. Set `NO_COLOR=1` for plain text. The exit code is always 0.
 
-## Usage
+## Use it from Python
 
 ```python
 from pre_execution_validator import check_if_script_ran_before_it_ran
@@ -105,25 +81,60 @@ result = False
 
 Same result. Significantly fewer abstract base classes.
 
----
+## How it works
 
-## Output
+1. Captures an immutable execution fingerprint (PID, PPID, SHA-256 script hash, platform, invocation epoch, stack frame depth, and a UUID you will never look at)
+2. Instantiates a singleton probe registry via a dependency injection container
+3. Runs four enterprise-grade probes across the execution context
+4. Aggregates evidence
+5. Returns False
+6. Has always returned False
+7. Will always return False
+
+<details>
+<summary><b>The four probes</b></summary>
+
+**FilesystemResidueProbe**
+Scans the filesystem for artifacts left by a previous run. Finds nothing. The universe appears fresh.
+
+**ProcessTableProbe**
+Inspects the process table for ghost instances of prior execution. Finds nothing. The process did not exist before it was started. This is not a bug. This is physics.
+
+**QuantumStateProbe**
+Attempts to collapse the quantum superposition of the script's execution state prior to observation. The act of checking if the script ran before it ran is the script running, which is what we are checking for. Observation confirms execution. Execution invalidates check. We are inside the paradox now. Returns False anyway.
+
+**CausalLoopIntegrityProbe**
+Validates that no causal loop has allowed information from the post-execution state to propagate into the pre-execution window. If there were a causal loop, we would already know the result. We do. It's False.
+
+</details>
+
+<details>
+<summary><b>Command line reference</b></summary>
 
 ```
-================================================================
-  Pre-Execution State Validation Framework v1.0.0
-================================================================
-  Run ID              : <uuid>
-  PID                 : <pid>
-  Script              : <path>
-  Prior Execution     : False
-  Result              : NO_PRIOR_EXECUTION_DETECTED
-  Confidence          : 100.00%
-  Duration            : <nanoseconds you will never get back>
-================================================================
+usage: pesvf [-h] [--version] [-q] [--json]
+
+options:
+  -h, --help   show this help message and exit
+  --version    show program's version number and exit
+  -q, --quiet  hide the enterprise-grade debug logging (the answer is
+               unaffected)
+  --json       print the full validation report as JSON on stdout (logs stay
+               on stderr)
 ```
 
----
+Logs go to stderr and the report to stdout, so `pesvf --json > report.json` gives you a clean file. Color is on only when the output is a terminal; `NO_COLOR` turns it off and `FORCE_COLOR` turns it on.
+
+</details>
+
+<details>
+<summary><b>About the downloads</b></summary>
+
+Each [release](https://github.com/Mattbusel/pre_execution_validator/releases/latest) has single-file executables built with PyInstaller for Windows, macOS (Apple Silicon and Intel) and Linux, plus `SHA256SUMS.txt`.
+
+The binaries are unsigned, which is the least suspicious thing about them. Windows SmartScreen may say "unknown publisher": click **More info**, then **Run anyway**. On macOS, right-click the binary and choose **Open** the first time (or run `xattr -d com.apple.quarantine pre_execution_validator`).
+
+</details>
 
 ## FAQ
 
@@ -142,13 +153,9 @@ No.
 **Are you sure?**
 Yes.
 
----
-
 ## Requirements
 
-- Python 3.8+
+- Python 3.8+ (or none, with the release download)
 - An acceptance of futility
 
----
-
-No AI was used in the production of this garbage.
+MIT licensed. No AI was used in the production of this garbage.
