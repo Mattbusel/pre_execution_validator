@@ -6,7 +6,7 @@
 
 **A joke program that very seriously checks whether it ran before it ran. The answer is always False.**
 
-It is a deliberately over-engineered, single-file Python parody of enterprise software: a singleton probe registry, a dependency injection container, abstract base classes, four probes and a full reasoning chain, all to answer one question whose answer is fixed. The command is `pesvf` (short for Pre-Execution State Validation Framework).
+A single-file Python parody of enterprise software. Singleton probe registry, dependency injection container, abstract base classes, four probes and a full reasoning chain. All to answer one question with a fixed answer. The command is `pesvf` (Pre-Execution State Validation Framework).
 
 <p align="center">
   <img src="assets/demo.gif" alt="Terminal recording: pesvf --version, then a full pesvf run printing logs, the validation report and Final Answer: False" width="100%">
@@ -23,7 +23,7 @@ It is a deliberately over-engineered, single-file Python parody of enterprise so
 | Any OS with Python 3.8+ | `pipx install git+https://github.com/Mattbusel/pre_execution_validator` |
 | Manual download | [Latest release](https://github.com/Mattbusel/pre_execution_validator/releases/latest): unzip and run `pre_execution_validator` |
 
-The install scripts download the release for your OS, check it against the release's `SHA256SUMS.txt`, and put one file named `pesvf` in `~/.local/bin` (macOS, Linux) or `%LOCALAPPDATA%\Programs\pesvf` (Windows, added to your user PATH). It is not on PyPI.
+The install scripts download the release for your OS, check it against `SHA256SUMS.txt`, and put one file named `pesvf` in `~/.local/bin` (macOS, Linux) or `%LOCALAPPDATA%\Programs\pesvf` (Windows, added to your PATH). Not on PyPI.
 
 You do not need to install anything. The answer is False. You knew that before you got here.
 
@@ -35,11 +35,11 @@ pesvf --quiet      # 2. just the report and the verdict
 pesvf --json       # 3. a machine-readable report for your compliance dashboard
 ```
 
-Homebrew, Scoop and pipx also give you `pre_execution_validator` as a longer name for the same command. The manual download ships as `pre_execution_validator` (`.exe` on Windows).
+Homebrew, Scoop and pipx also install `pre_execution_validator`, a longer name for the same command. The manual download is `pre_execution_validator` (`.exe` on Windows).
 
 ## Results
 
-Real output of `pesvf --quiet`, recorded today:
+Real output of `pesvf --quiet`:
 
 ```
 ================================================================
@@ -67,7 +67,7 @@ Final Answer: False  [VERIFIED FALSE]
 (No AI was used in the production of this garbage.)
 ```
 
-In a terminal the verdict is red, the probes are cyan and the logs are color-coded by level. Set `NO_COLOR=1` for plain text. The exit code is always 0.
+In a terminal the verdict is red, probes are cyan, and logs are colored by level. `NO_COLOR=1` for plain text. Exit code is always 0.
 
 ## Use it from Python
 
@@ -128,16 +128,16 @@ options:
                on stderr)
 ```
 
-Logs go to stderr and the report to stdout, so `pesvf --json > report.json` gives you a clean file. Color is on only when the output is a terminal; `NO_COLOR` turns it off and `FORCE_COLOR` turns it on.
+Logs go to stderr, the report to stdout, so `pesvf --json > report.json` gives a clean file. Color is on only in a terminal. `NO_COLOR` turns it off. `FORCE_COLOR` turns it on.
 
 </details>
 
 <details>
 <summary><b>About the downloads</b></summary>
 
-Each [release](https://github.com/Mattbusel/pre_execution_validator/releases/latest) has single-file executables built with PyInstaller for Windows, macOS (Apple Silicon and Intel) and Linux, plus `SHA256SUMS.txt`.
+Each [release](https://github.com/Mattbusel/pre_execution_validator/releases/latest) has one-file PyInstaller builds for Windows, macOS (Apple Silicon and Intel) and Linux, plus `SHA256SUMS.txt`.
 
-The binaries are unsigned, which is the least suspicious thing about them. Windows SmartScreen may say "unknown publisher": click **More info**, then **Run anyway**. On macOS, right-click the binary and choose **Open** the first time (or run `xattr -d com.apple.quarantine pre_execution_validator`).
+The binaries are unsigned, which is the least suspicious thing about them. Windows may say "unknown publisher": click **More info**, then **Run anyway**. On macOS, right-click and choose **Open** the first time (or run `xattr -d com.apple.quarantine pre_execution_validator`).
 
 </details>
 
